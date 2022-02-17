@@ -1,34 +1,67 @@
 const { Schema, model } = require("mongoose");
-const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
+const crypto = require("crypto");
 const SALT_FACTOR = 6;
 
-const userSchema = new Schema({
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-  },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter",
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-  avatarURL: {
-    type: String,
-    default: function () {
-      return gravatar.url(this.email, { s: "250" }, true);
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      min: 2,
+      max: 30,
+      default: "Guest",
+    },
+    email: {
+      type: String,
+      required: [true, "Set email for user"],
+      unique: true,
+      validate(value) {
+        const re = /\S+@\S+.\S+/;
+        return re.test(String(value).toLowerCase());
+      },
+    },
+    password: {
+      type: String,
+      required: [true, "Set password for user"],
+    },
+    balance: {
+      type: Number,
+      default: 0,
+    },
+    token: {
+      type: String,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "250" }, true);
+      },
+    },
+    idUserCloud: { type: String, default: null },
+    isVerified: { type: Boolean, default: false },
+
+    verifyTokenEmail: {
+      type: String,
+      // required: [true, "Verify token is required"],
+      default: crypto.randomUUID(),
     },
   },
-});
+
+  {
+    versionKey: false,
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret._id;
+        return ret;
+      },
+    },
+    toObject: { virtuals: true },
+  }
+);
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {

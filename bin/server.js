@@ -10,8 +10,6 @@ const PORT = process.env.PORT || 3000;
 
 db.then(() => {
   app.listen(PORT, async () => {
-    await mkdirp(UPLOAD_DIR);
-    await mkdirp(AVATAR_OF_USER);
     console.log(`Server is running. Use our API on port: ${PORT}`);
   });
 }).catch((err) => {

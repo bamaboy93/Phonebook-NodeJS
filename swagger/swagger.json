@@ -1,0 +1,775 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Phonebook",
+    "description": "Web application",
+    "version": "1.0.0"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User endpoints"
+    },
+    {
+      "name": "Contacts",
+      "description": "Contacts endpoints"
+    }
+  ],
+  "servers": [
+    { "url": "https://git.heroku.com/phonebook-nodeJs.git" },
+    { "url": "http://localhost:3000" }
+  ],
+
+  "paths": {
+    "/api/users/signup": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User signup",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "your@email.com",
+                    "description": "Email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123",
+                    "description": "Password"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Your Name",
+                    "description": "Name"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "201"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "response data",
+                      "example": {
+                        "id": "id-123-qwe-456-rty",
+                        "name": "My Name",
+                        "email": "example@email.com",
+                        "avatar": "https://path/to/avatar",
+                        "successEmail": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "409": {
+            "description": "Conflict (email is already in use)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "409"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Email is already in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/users/signin": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "your@email.com",
+                    "description": "Email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwwerty123",
+                    "description": "Password"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "200"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "response data",
+                      "example": {
+                        "email": "example@email.com",
+                        "name": "My Name",
+                        "balance": 10000,
+                        "token": "token_123qwe456rty",
+                        "avatar": "https://path/to/avatar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "401"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Invalid credentials | User email not verified yet"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/users/signout": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "204": { "description": "Success" },
+
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "401"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/users/verify/{token}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Verify email with token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "email verification token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "301": {
+            "description": "Success, redirect to client-side login page"
+          },
+
+          "400": {
+            "description": "Bad request (Invalid token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Invalid token"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/users/verify": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Resend verification email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@email.com",
+                    "description": "Email"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "200"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "response data",
+                      "example": { "message": "Verification email sent" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Bad request (Verification already passed)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "400"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Verification has already been passed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error 404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get current user",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "200"
+                    },
+                    "message": {
+                      "type": "number",
+                      "description": "response message",
+                      "example": "Current user"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "response data",
+                      "example": {
+                        "user": {
+                          "id": "id-123-qwe-456-rty",
+                          "email": "example@email.com",
+                          "name": "My Name",
+                          "balance": 10000,
+                          "avatar": "https://path/to/avatar"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "401"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "response message",
+                      "example": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/avatar": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Change user avatar",
+        "security": [{ "Bearer": [] }],
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "avatar",
+            "in": "query",
+            "description": "upload new avatar",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "file"
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "response status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "number",
+                      "description": "response code",
+                      "example": "200"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "response data",
+                      "example": { "avatar": "https://path/to/avatar" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/contacts/all": {
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "Get all contacts",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "success",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data",
+                      "example": {
+                        "totalBalance": 1000
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "responses status",
+                "example": "error"
+              },
+              "code": {
+                "type": "string",
+                "description": "responses code",
+                "example": "403"
+              },
+              "message": {
+                "type": "string",
+                "description": "responses message",
+                "example": "Access denied"
+              }
+            }
+          },
+          "500": {
+            "description": "Iternal ServerError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/contacts/new": {
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Create new contact",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "number"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Newman",
+                    "description": "name"
+                  },
+                  "number": {
+                    "type": "string",
+                    "example": "665-78-56",
+                    "description": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "500": {
+            "description": "Iternal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{contactId}": {
+      "delete": {
+        "tags": ["Contacts"],
+        "summary": "Delete contact",
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "responses status",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "responses code",
+                      "example": "200"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "responses data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "500": {
+            "description": "Iternal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error500"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
