@@ -29,12 +29,12 @@ class EmailService {
     const email = {
       body: {
         name,
-        intro: "Welcome to Phonebook! We're very excited to have you on board.",
+        intro: "Welcome! We're very excited to have you on board.",
         signature: "Yours truly",
         action: {
           instructions: "To get started with Phonebook please click here:",
           button: {
-            color: "#22BC66", // Optional action button color
+            color: "#22BC66",
             text: "Confirm your account",
             link: `${this.link}/api/users/verify/${verifyToken}`,
           },

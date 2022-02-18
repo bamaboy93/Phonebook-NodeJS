@@ -25,10 +25,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Set password for user"],
     },
-    balance: {
-      type: Number,
-      default: 0,
-    },
+
     token: {
       type: String,
       default: null,

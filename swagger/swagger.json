@@ -200,7 +200,7 @@
                       "example": {
                         "email": "example@email.com",
                         "name": "My Name",
-                        "balance": 10000,
+
                         "token": "token_123qwe456rty",
                         "avatar": "https://path/to/avatar"
                       }
@@ -491,7 +491,7 @@
                           "id": "id-123-qwe-456-rty",
                           "email": "example@email.com",
                           "name": "My Name",
-                          "balance": 10000,
+
                           "avatar": "https://path/to/avatar"
                         }
                       }
