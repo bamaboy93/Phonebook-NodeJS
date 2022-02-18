@@ -8,8 +8,7 @@ class EmailService {
         this.link = " https://ee10-185-159-163-198.ngrok.io";
         break;
       case "production":
-        this.link =
-          "http://localhost:3000/login/api/users/verify/${verifyTokenEmail}";
+        this.link = `http://localhost:3000`;
         break;
       default:
         this.link = "http://127.0.0.1:3000";
@@ -37,7 +36,7 @@ class EmailService {
           button: {
             color: "#22BC66",
             text: "Confirm your account",
-            link: `${this.link}`,
+            link: `${this.link}/login/api/users/verify/${verifyToken}`,
           },
         },
       },
