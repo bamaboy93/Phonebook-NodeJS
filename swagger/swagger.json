@@ -18,7 +18,7 @@
     }
   ],
   "servers": [
-    { "url": "https://git.heroku.com/phonebook-nodeJs.git" },
+    { "url": "https://git.heroku.com/phonebooknodejs.git" },
     { "url": "http://localhost:3000" }
   ],
 
