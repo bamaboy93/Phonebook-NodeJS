@@ -65,11 +65,15 @@ const signIn = async (req, res, next) => {
   const payload = { id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
   await Users.updateToken(id, token);
+  const { name, avatar } = user;
   return res.status(HttpCode.OK).json({
     status: "success",
     code: HttpCode.OK,
-    date: {
+    data: {
+      email,
+      name,
       token,
+      avatar,
     },
   });
 };
@@ -83,7 +87,7 @@ const loginByGoogle = async (req, res) => {
   if (!user || user.token !== token)
     throw new CustomError(HttpCode.UNAUTHORIZED, "Invalid credentials");
 
-  const { name, balance, avatar, email } = user;
+  const { name, avatar, email } = user;
 
   return res.status(HttpCode.OK).json({
     status: "success",
@@ -91,7 +95,7 @@ const loginByGoogle = async (req, res) => {
     data: {
       email,
       name,
-      balance,
+
       token,
       avatar,
     },
@@ -185,7 +189,6 @@ const current = async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        balance: user.balance,
         avatar: user.avatar,
       },
     });
