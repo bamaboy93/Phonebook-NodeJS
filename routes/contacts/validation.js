@@ -9,14 +9,14 @@ const patterns = {
 
 const schemaContact = Joi.object({
   name: Joi.string().min(2).max(20).pattern(patterns.name).required(),
-  email: Joi.string().email().required(),
+
   phone: Joi.string().pattern(patterns.phone).required(),
   favorite: Joi.boolean().optional(),
 });
 
 const schemaContactPatch = Joi.object({
   name: Joi.string().min(2).max(20).pattern(patterns.name).optional(),
-  email: Joi.string().email().optional(),
+
   phone: Joi.string().pattern(patterns.phone).optional(),
   favorite: Joi.boolean().optional(),
 }).min(1);

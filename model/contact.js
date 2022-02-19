@@ -10,11 +10,7 @@ const contactSchema = new Schema(
       max: ValidContactName.MIN_LENGTH,
       required: [true, "Set name for contact"],
     },
-    email: {
-      type: String,
-      required: [true, "Set email for contact"],
-      unique: true,
-    },
+
     phone: {
       type: String,
       required: [true, "Set phone for contact"],
