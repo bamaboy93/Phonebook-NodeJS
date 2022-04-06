@@ -61,16 +61,16 @@ const signIn = async (req, res, next) => {
       message: "Invalid credentials",
     });
   }
-  const id = user._id;
-  const payload = { id };
+  const userId = user._id;
+  const payload = { userId };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-  await Users.updateToken(id, token);
+  await Users.updateToken(userId, token);
   const { name, avatar } = user;
   return res.status(HttpCode.OK).json({
     status: "success",
     code: HttpCode.OK,
     data: {
-      id,
+      id: user.id,
       email,
       name,
       token,
