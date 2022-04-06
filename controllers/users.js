@@ -70,6 +70,7 @@ const signIn = async (req, res, next) => {
     status: "success",
     code: HttpCode.OK,
     data: {
+      id,
       email,
       name,
       token,
@@ -93,6 +94,7 @@ const loginByGoogle = async (req, res) => {
     status: "success",
     code: HttpCode.OK,
     data: {
+      id,
       email,
       name,
 
