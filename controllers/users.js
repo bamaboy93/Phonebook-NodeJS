@@ -73,7 +73,6 @@ const signIn = async (req, res, next) => {
       id,
       email,
       name,
-      token,
       avatar,
     },
   });
