@@ -144,7 +144,7 @@ const verifyUser = async (req, res, next) => {
       status: "success",
       code: HttpCode.OK,
       data: {
-        message: "Success",
+        message: "E-mail is verified!",
       },
     });
   }
