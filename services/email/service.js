@@ -36,7 +36,8 @@ class EmailService {
           button: {
             color: "#22BC66",
             text: "Confirm your account",
-            link: `${this.link}/api/users/verify/${verifyToken}`,
+            link: "https://mailgen.js/confirm?s=d9729feb74992cc3482b350163a1a010",
+            // link: `${this.link}/api/users/verify/${verifyToken}`,
           },
         },
       },
