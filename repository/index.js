@@ -17,10 +17,6 @@ const listContacts = async (userId, query) => {
     limit,
     page,
 
-    sort: {
-      ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
-      ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
-    },
     select: filter ? filter.split("|").join(" ") : "",
     populate: {
       path: "owner",
