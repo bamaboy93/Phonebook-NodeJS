@@ -1,14 +1,7 @@
 const Contact = require("../model/contact");
 
 const listContacts = async (userId, query) => {
-  const {
-    sortBy,
-    sortByDesc,
-    filter,
-    favorite = null,
-    page = 1,
-    limit = 1e12,
-  } = query;
+  const { filter, favorite = null, page = 1, limit = 1e12 } = query;
   const searchoptions = { owner: userId };
   if (favorite !== null) {
     searchoptions.favorite = favorite;
