@@ -9,7 +9,7 @@ require("dotenv").config();
 require("./helpers/google-auth");
 
 const { HttpCode } = require("./config/constant");
-const USERS_AVATARS = process.env.USERS_AVATARS;
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
 
 const contactsRouter = require("./routes/contacts/contacts");
 const usersRouter = require("./routes/users/users");
@@ -18,7 +18,7 @@ const swaggerRouter = require("./routes/swagger/swagger");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-app.use(express.static(USERS_AVATARS));
+app.use(express.static(AVATAR_OF_USERS));
 app.use(helmet());
 
 app.use(logger(formatsLogger));

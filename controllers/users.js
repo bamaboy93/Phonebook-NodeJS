@@ -4,7 +4,11 @@ const Users = require("../repository/users");
 const { HttpCode } = require("../config/constant");
 require("dotenv").config();
 
-const UploadService = require("../services/cloud-upload");
+// const UploadService = require("../services/cloud-upload");
+const path = require("path");
+const mkdirp = require("mkdirp");
+const UploadService = require("../services/file-upload");
+
 const EmailService = require("../services/email/service");
 const {
   CreateSenderSendGrid,
@@ -110,31 +114,49 @@ const signOut = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({ test: "test" });
 };
 
-const uploadAvatar = async (req, res, next) => {
-  const { id, idUserCloud } = req.user;
+const uploadAvatar = async (req, res) => {
+  const id = String(req.user._id);
   const file = req.file;
-
-  const destination = "Avatars";
+  const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+  const destination = path.join(AVATAR_OF_USERS, id);
+  await mkdirp(destination);
   const uploadService = new UploadService(destination);
-  const { avatarUrl, returnIdUserCloud } = await uploadService.save(
-    file.path,
-    idUserCloud
-  );
-
-  await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
-  try {
-    await fs.unlink(file.path);
-  } catch (error) {
-    console.log(error.message);
-  }
-  return res.status(HttpCode.OK).json({
+  const avatarUrl = await uploadService.save(file, id);
+  await Users.updateAvatar(id, avatarUrl);
+  return res.status(200).json({
     status: "success",
-    code: HttpCode.OK,
-    date: {
+    code: 200,
+    data: {
       avatar: avatarUrl,
     },
   });
 };
+
+// const uploadAvatar = async (req, res, next) => {
+//   const { id, idUserCloud } = req.user;
+//   const file = req.file;
+
+//   const destination = "Avatars";
+//   const uploadService = new UploadService(destination);
+//   const { avatarUrl, returnIdUserCloud } = await uploadService.save(
+//     file.path,
+//     idUserCloud
+//   );
+
+//   await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
+//   try {
+//     await fs.unlink(file.path);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+//   return res.status(HttpCode.OK).json({
+//     status: "success",
+//     code: HttpCode.OK,
+//     date: {
+//       avatar: avatarUrl,
+//     },
+//   });
+// };
 
 const verifyUser = async (req, res, next) => {
   const user = await Users.findUserByVerifyToken(req.params.token);
