@@ -49,69 +49,35 @@ const getContactById = async (contactId, userId) => {
 };
 
 const removeContact = async (contactId, userId, query) => {
-  const contactToDelete = await Contact.findOne({
+  const contact = await Contact.findOneAndRemove({
     _id: contactId,
     owner: userId,
   });
-
-  const { date, createdAt } = contactToDelete;
-
-  const deletedContact = await Contact.findByIdAndRemove(contactId);
-  const { contacts: updatedContacts, pageInfo } = await listContacts(
-    userId,
-    query
-  );
-
+  const { contacts, pageInfo } = await listContacts(userId, query);
   return {
-    contacts: updatedContacts,
-    deletedContact,
+    contacts,
+    contact,
     pageInfo,
   };
 };
 
 const addContact = async (body, date, query) => {
-  const { contacts } = await listContacts(userId, {});
-  const lastContact = findLastContact(contacts);
-  const latestPrevContact = findLatestPrevContact(contacts, date);
-  const laterContacts = findLaterContacts(contacts, date);
-  await Contact.create(body);
-  const { contacts: updatedContacts, pageInfo } = await listTransactions(
-    userId,
-    query
-  );
+  const newContact = await Contact.create(body);
+  const { contacts, pageInfo } = await listTransactions(userId, query);
   return {
-    contacts: updatedContacts,
+    contacts,
+    newContact,
     pageInfo,
   };
 };
 
-const updateContact = async (contactId, body, userId, query) => {
-  const contactToUpdate = await Contact.findOne({
-    _id: contactId,
-    owner: userId,
-  });
-  if (!updatedContact) return null;
-  const { date, createdAt } = contactToUpdate;
-  const { contacts } = await listContacts(userId, {});
-
-  const laterContacts = findLaterContacts(contacts, date, createdAt);
-  laterContacts.push(contactToUpdate);
+const updateContact = async (contactId, body, userId) => {
   const updatedContact = await Contact.findOneAndUpdate(
     { _id: contactId, owner: userId },
     { ...body },
     { new: true }
   );
-
-  const { contacts: updatedContacts, pageInfo } = await listContacts(
-    userId,
-    query
-  );
-
-  return {
-    updatedContact,
-    contacts: updatedContacts,
-    pageInfo,
-  };
+  return updatedContact;
 };
 module.exports = {
   listContacts,
