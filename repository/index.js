@@ -1,14 +1,30 @@
 const Contact = require("../model/contact");
 
 const listContacts = async (userId, query) => {
-  const { filter, favorite = null, page = 1, limit = 1e12 } = query;
+  const { sortBy = "date", sortByDesc, filter, page = 1, limit = 1e12 } = query;
   const searchoptions = { owner: userId };
-  if (favorite !== null) {
-    searchoptions.favorite = favorite;
-  }
+
   const result = await Contact.paginate(searchoptions, {
     limit,
     page,
+    sort: {
+      ...(!sortBy && !sortByDesc ? { date: 1 } : {}),
+
+      ...(sortBy
+        ? sortBy.split`|`.reduce((acc, item) => ({ ...acc, [item]: 1 }), {})
+        : {}),
+
+      ...(sortByDesc
+        ? sortByDesc.split`|`.reduce(
+            (acc, item) => ({ ...acc, [item]: -1 }),
+            {}
+          )
+        : {}),
+
+      ...(!sortBy?.includes("createdAt") && !sortByDesc?.includes("createdAt")
+        ? { createdAt: 1 }
+        : {}),
+    },
 
     select: filter ? filter.split("|").join(" ") : "",
     populate: {
