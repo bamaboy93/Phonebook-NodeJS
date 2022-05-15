@@ -1,19 +1,23 @@
-const app = require("../app");
 const db = require("../config/db");
-require("dotenv").config();
-const UPLOAD_DIR = process.env.UPLOAD_DIR;
-const AVATAR_OF_USERS = process.env.AVATAR_OF_USER;
-const mkdirp = require("mkdirp");
+const app = require("../app");
 
-require("dotenv").config();
+const result = require("dotenv").config();
+
+const UPLOAD_DIR = process.env.UPLOAD_DIR;
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
+const mkdirp = require("mkdirp");
+if (result.error) {
+  throw result.error;
+}
+
 const PORT = process.env.PORT || 3000;
 
 db.then(() => {
   app.listen(PORT, () => {
     mkdirp(UPLOAD_DIR);
     mkdirp(AVATAR_OF_USERS);
-    console.log(`Server is running. Use our API on port: ${PORT}`);
+    console.log(`Server running. Use our API on port: ${PORT}`);
   });
 }).catch((err) => {
-  console.log(`Server failed to run. Error: ${err.message}`);
+  console.log(`Server not run. Error: ${err.message}`);
 });

@@ -3,11 +3,11 @@ const fs = require("fs/promises");
 const path = require("path");
 
 class UploadFileAvatar {
-  constructor(dest) {
-    this.dest = dest;
+  constructor(destination) {
+    this.destination = destination;
   }
 
-  async transformAvatar(pathFile) {
+  async #transformAvatar(pathFile) {
     const pic = Jimp.read(pathFile);
     await (
       await pic
@@ -22,8 +22,9 @@ class UploadFileAvatar {
   }
 
   async save(file, idUser) {
-    await this.transformAvatar(file.path);
-    await fs.rename(file.path, path.join(this.dest, file.filename));
+    await this.#transformAvatar(file.path);
+    await fs.rename(file.path, path.join(this.destination, file.filename));
+    // Для статики в express папка не для урла, все что внутри папки для него урл
     return path.normalize(path.join(idUser, file.filename));
   }
 }

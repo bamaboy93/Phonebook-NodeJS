@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
-const gravatar = require("gravatar");
 const crypto = require("crypto");
 const SALT_FACTOR = 6;
 
