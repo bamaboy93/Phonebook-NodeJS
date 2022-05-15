@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3001;
 
 db.then(() => {
   app.listen(PORT, async () => {
-    await mkdirp(UPLOAD_DIR);
-    await mkdirp(AVATAR_OF_USERS);
+    // await mkdirp(UPLOAD_DIR);
+    // await mkdirp(AVATAR_OF_USERS);
     console.log(`Server running. Use our API on port: ${PORT}`);
   });
 }).catch((err) => {
