@@ -10,7 +10,7 @@ if (result.error) {
   throw result.error;
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 db.then(() => {
   app.listen(PORT, async () => {
