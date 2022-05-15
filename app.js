@@ -23,14 +23,13 @@ app.use(helmet());
 
 app.use(logger(formatsLogger));
 app.use(
-  cors()
-  // cors({
-  //   origin: "*",
-  //   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  //   preflightContinue: false,
-  //   optionsSuccessStatus: 204,
-  //   credentials: true,
-  // })
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  })
 );
 app.use(express.json({ limit: 10000 }));
 app.use(boolParser());
