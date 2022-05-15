@@ -4,9 +4,6 @@ const app = require("../app");
 require("dotenv").config();
 
 const mkdirp = require("mkdirp");
-if (result.error) {
-  throw result.error;
-}
 
 const PORT = process.env.PORT || 3000;
 
