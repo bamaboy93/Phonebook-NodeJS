@@ -22,6 +22,7 @@ app.use(express.static(AVATAR_OF_USERS));
 app.use(helmet());
 
 app.use(logger(formatsLogger));
+app.options("*", cors());
 app.use(
   cors({
     origin: "*",
