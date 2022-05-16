@@ -132,42 +132,12 @@ const uploadAvatar = async (req, res) => {
   });
 };
 
-// const uploadAvatar = async (req, res, next) => {
-//   const { id, idUserCloud } = req.user;
-//   const file = req.file;
-
-//   const destination = "Avatars";
-//   const uploadService = new UploadService(destination);
-//   const { avatarUrl, returnIdUserCloud } = await uploadService.save(
-//     file.path,
-//     idUserCloud
-//   );
-
-//   await Users.updateAvatar(id, avatarUrl, returnIdUserCloud);
-//   try {
-//     await fs.unlink(file.path);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-//   return res.status(HttpCode.OK).json({
-//     status: "success",
-//     code: HttpCode.OK,
-//     date: {
-//       avatar: avatarUrl,
-//     },
-//   });
-// };
-
 const verifyUser = async (req, res, next) => {
   const user = await Users.findUserByVerifyToken(req.params.token);
   if (user) {
     await Users.updateTokenVerify(user._id, true, null);
     return res.status(HttpCode.OK).json({
-      status: "success",
-      code: HttpCode.OK,
-      data: {
-        message: "E-mail is verified!",
-      },
+      message: "E-mail is verified! Now you can SignIn.",
     });
   }
   return res.status(HttpCode.BAD_REQUEST).json({

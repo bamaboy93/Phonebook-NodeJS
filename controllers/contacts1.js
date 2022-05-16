@@ -25,23 +25,16 @@ const getContact = async (req, res, next) => {
 };
 
 const saveContact = async (req, res, next) => {
-  const { name, phone } = req.body;
   const userId = req.user._id;
-
   const contact = await Contacts.addContact({
-    name,
-    phone,
-
+    ...req.body,
     owner: userId,
   });
   if (contact) {
     return res.json({
       status: "success",
       code: HttpCode.CREATED,
-      data: {
-        name: contact.name,
-        phone: contact.phone,
-      },
+      data: { contact },
     });
   }
 
