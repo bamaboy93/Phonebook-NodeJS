@@ -34,7 +34,7 @@ const saveContact = async (req, res, next) => {
     return res.json({
       status: "success",
       code: HttpCode.CREATED,
-      data: { contact },
+      data: { contact, pageInfo },
     });
   }
 
@@ -50,7 +50,7 @@ const removeContact = async (req, res, next) => {
       status: "success",
       code: HttpCode.OK,
       message: "Deleted",
-      data: { contact },
+      data: { contact, pageInfo },
     });
   }
 
