@@ -4,11 +4,11 @@ const { HttpCode } = require("../config/constant");
 
 const getContacts = async (req, res) => {
   const userId = req.user._id;
-  const data = await Contacts.listContacts(userId, req.query);
+  const { contacts, pageInfo } = await Contacts.listContacts(userId, req.query);
   res.json({
     status: "success",
     code: HttpCode.OK,
-    data: { ...data },
+    data: { contacts, pageInfo },
   });
 };
 
@@ -26,7 +26,7 @@ const getContact = async (req, res, next) => {
 
 const saveContact = async (req, res, next) => {
   const userId = req.user._id;
-  const contact = await Contacts.addContact({
+  const { contact, pageInfo } = await Contacts.addContact({
     ...req.body,
     owner: userId,
   });
@@ -44,7 +44,10 @@ const saveContact = async (req, res, next) => {
 const removeContact = async (req, res, next) => {
   const userId = req.user._id;
 
-  const contact = await Contacts.removeContact(req.params.contactId, userId);
+  const { contact, pageInfo } = await Contacts.removeContact(
+    req.params.contactId,
+    userId
+  );
   if (contact) {
     return res.status(HttpCode.OK).json({
       status: "success",

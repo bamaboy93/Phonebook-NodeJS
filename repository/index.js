@@ -32,9 +32,9 @@ const listContacts = async (userId, query) => {
       select: "email subscription",
     },
   });
-  const { docs: contacts } = result;
+  const { docs: contacts, ...pageInfo } = result;
   delete result.docs;
-  return { ...result, contacts };
+  return { ...result, contacts, pageInfo };
 };
 
 const getContactById = async (contactId, userId) => {
@@ -53,12 +53,14 @@ const removeContact = async (contactId, userId) => {
     _id: contactId,
     owner: userId,
   });
-  return contact;
+  const { pageInfo } = await listContacts(userId, query);
+  return { contact, pageInfo };
 };
 
 const addContact = async (body) => {
   const newContact = await Contact.create(body);
-  return newContact;
+  const { pageInfo } = await listContacts(userId, query);
+  return { newContact, pageInfo };
 };
 
 const updateContact = async (contactId, body, userId) => {
