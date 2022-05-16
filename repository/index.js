@@ -1,7 +1,7 @@
 const Contact = require("../model/contact");
 
 const listContacts = async (userId, query) => {
-  const { sortBy = "date", sortByDesc, filter, page = 1, limit = 1e12 } = query;
+  const { sortBy = "date", sortByDesc, filter, page = 1, limit = 5 } = query;
   const searchoptions = { owner: userId };
 
   const result = await Contact.paginate(searchoptions, {
