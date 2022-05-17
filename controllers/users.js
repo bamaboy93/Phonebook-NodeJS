@@ -1,3 +1,5 @@
+const axios = require("axios");
+const queryString = require("query-string");
 const jwt = require("jsonwebtoken");
 const fs = require("fs/promises");
 const Users = require("../repository/users");
@@ -83,31 +85,6 @@ const signIn = async (req, res, next) => {
   });
 };
 
-const loginByGoogle = async (req, res) => {
-  const { token } = req.body;
-  const { id } = jwt.verify(token, SECRET_KEY);
-
-  const user = await Users.findById(id);
-
-  if (!user || user.token !== token)
-    throw new CustomError(HttpCode.UNAUTHORIZED, "Invalid credentials");
-
-  const { name, avatar, email } = user;
-
-  return res.status(HttpCode.OK).json({
-    status: "success",
-    code: HttpCode.OK,
-    data: {
-      id,
-      email,
-      name,
-
-      token,
-      avatar,
-    },
-  });
-};
-
 const signOut = async (req, res, next) => {
   const id = req.user._id;
   await Users.updateToken(id, null);
@@ -190,6 +167,75 @@ const current = async (req, res) => {
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found");
 };
 
+///////Google Auth
+
+const googleAuth = async (req, res) => {
+  const stringifiedParams = queryString.stringify({
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ].join(" "),
+    response_type: "code",
+    access_type: "offline",
+    prompt: "consent",
+  });
+  return res.redirect(
+    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
+  );
+};
+
+const googleRedirect = async (req, res, next) => {
+  const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  const urlObj = new URL(fullUrl);
+  const urlParams = queryString.parse(urlObj.search);
+  const code = urlParams.code;
+  const tokenData = await axios({
+    url: "https://oauth2.googleapis.com/token",
+    method: "post",
+    data: {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${process.env.BASE_URL}/auth/google-redirect`,
+      grant_type: "authorization_code",
+      code,
+    },
+  });
+  const userData = await axios({
+    url: "https://www.googleapis.com/oauth2/v2/userinfo",
+    method: "get",
+    headers: {
+      Authorization: `Bearer ${tokenData.data.access_token}`,
+    },
+  });
+  const { id: verificationToken, name, email, picture } = userData.data;
+  const { access_token: token } = tokenData.data;
+  const user = await Users.findOne({ email });
+  if (!user) {
+    const newUser = new Users({
+      email,
+      name,
+      picture,
+      token,
+      verificationToken,
+      isGoogle: true,
+      verify: true,
+    });
+    await newUser.save();
+  }
+  if (user && !user.verify) {
+    throw new BadRequest(
+      "Not Verified. Please enter your email and confirm registration"
+    );
+  }
+  if (user && user.token === null) {
+    await Users.findByIdAndUpdate(user._id, { token });
+  }
+
+  return res.redirect(`${process.env.FRONTEND_URL}/auth?accessToken=${token}`);
+};
+
 module.exports = {
   signUp,
   signIn,
@@ -198,5 +244,6 @@ module.exports = {
   verifyUser,
   repeatEmailForVerifyUser,
   current,
-  loginByGoogle,
+  googleAuth,
+  googleRedirect,
 };

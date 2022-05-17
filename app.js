@@ -6,7 +6,6 @@ const helmet = require("helmet");
 const boolParser = require("express-query-boolean");
 
 require("dotenv").config();
-require("./helpers/google-auth");
 
 const { HttpCode } = require("./config/constant");
 const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;

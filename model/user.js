@@ -48,6 +48,10 @@ const userSchema = new Schema(
       // required: [true, "Verify token is required"],
       default: crypto.randomUUID(),
     },
+    isGoogle: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   {
