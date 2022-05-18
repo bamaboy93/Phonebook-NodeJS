@@ -113,7 +113,7 @@ const verifyUser = async (req, res, next) => {
   const user = await Users.findUserByVerifyToken(req.params.token);
   if (user) {
     await Users.updateTokenVerify(user._id, true, null);
-    return res.redirect(301, `${process.env.FRONTEND_URL}`);
+    return res.redirect(301, `${process.env.MAIN_URL}`);
   }
   return res.status(HttpCode.BAD_REQUEST).json({
     status: "error",
